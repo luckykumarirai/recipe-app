@@ -1,9 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Title, IconButton,TextInput,Card,Button } from 'react-native-paper';
+import {TextInput,Card,Button,Appbar } from 'react-native-paper';
 export default function SignupScreen({ navigation }) {
 
   return (
+    <>
+     <Appbar.Header>
+        <Appbar.Action icon="menu"  onPress={() => navigation.openDrawer()}   />
+        <Appbar.Content title="Recipe-app" />
+      </Appbar.Header>
     <View style={{padding:30,marginTop:50}}>
     <Card style={styles.card}>
       <Card.Title style={{marginLeft:80}}title="Signin"/>
@@ -22,13 +27,14 @@ export default function SignupScreen({ navigation }) {
         secureTextEntry={true}
       />
       <Card.Actions>
-        <Button  mode="contained"  style={{marginTop:10,width:250}} >
+        <Button  mode="contained" onPress={() => navigation.navigate('List of Recipe')} style={{marginTop:10,width:250}} >
           Submit
         </Button>
       </Card.Actions>
     </Card.Content>
 </Card>
   </View>
+  </>
   );
 }
 

@@ -1,11 +1,15 @@
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import { Button, Card, Paragraph } from 'react-native-paper';
+import { Button, Card, Appbar } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
   return (
     <>
+        <Appbar.Header>
+          <Appbar.Action icon="menu"  onPress={() => navigation.openDrawer()}   />
+          <Appbar.Content title="Recipe-app" />
+       </Appbar.Header>
         <LinearGradient colors={['#8E60D9', '#E31748']} style={styles.container}>
         <ScrollView>
         <Card style={styles.cardstyle}>

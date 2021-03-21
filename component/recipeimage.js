@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { Avatar, Button, Card, Title, Paragraph,List,Menu,IconButton, Colors} from 'react-native-paper';
-import { StyleSheet, ScrollView ,View,Text} from 'react-native';
+import { Avatar,Appbar, Card,List,Menu,IconButton, Colors} from 'react-native-paper';
+import { ScrollView ,View,Text} from 'react-native';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
-export default function Recipeimage (){
+export default function Recipeimage ({navigation}){
   return(
+    <>
+    <Appbar.Header>
+    <Appbar.Action icon="menu"  onPress={() => navigation.openDrawer()}   />
+    <Appbar.Content title="Recipe-app" />
+  </Appbar.Header>
+
   <ScrollView>
   <Card>
     <Card.Title title="Angoori-rasmalai"  />
@@ -80,5 +86,6 @@ export default function Recipeimage (){
     </Card.Actions>
   </Card>
   </ScrollView>
+  </>
 );
 }
