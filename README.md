@@ -11,7 +11,7 @@ The aim of this project is to provide free recipe list to users with full descri
 ## Tech Stack
 
 - Firebase   
-- react-native 
+- React-Native 
 ### This is Home page of App 
 <p>
 <img src="https://github.com/luckykumarirai/recipe-app/blob/master/readme_images/1.jpeg" height="500" width="300" />&nbsp; &nbsp; &nbsp; &nbsp;
