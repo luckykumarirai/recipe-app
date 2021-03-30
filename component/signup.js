@@ -1,36 +1,42 @@
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Title, IconButton,TextInput,Card,Button,Appbar } from 'react-native-paper';
-import * as firebase  from 'firebase';
+import React, { useState,useEffect} from 'react';
+import {StyleSheet} from 'react-native';
+import {  Paragraph,Dialog,TextInput,Card,Button,HelperText} from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
 
 export default function SignupScreen({ navigation }) {
-  const [name,setName]=useState('');
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-
-  function saveitem(){
-    // console.log(name);
-    const myitem=firebase.database().ref("users");
-    myitem.push().set({
-      name:name,
-      email:email,
-      password:password,
-      time:Date.now(),
+   const [name,setName]=useState('');
+   const [email,setEmail]=useState('');
+   const [password,setPassword]=useState('');
+   const [error,setError]=useState('');
+   const [visible, setVisible] = React.useState(false);
+   const hideDialog = () => setVisible(false);
+   function saveitem(){
+    firebase.auth().createUserWithEmailAndPassword(email,password)
+    .then(()=>{
+        const myitem=firebase.database().ref('user');
+           myitem.push().set({
+           name:name,
+           email:email,
+           password:password,
+           time:Date.now(),
+       });
     })
-
+    .catch(error=>{
+      setVisible(true) ;
+      console.log(error.message);
+      setError(error.message);
+    })
   }
-
   return (
     <>
-    <Appbar.Header>
-        <Appbar.Action icon="menu"  onPress={() => navigation.openDrawer()}   />
-        <Appbar.Content title="Recipe-app" />
-      </Appbar.Header>
-
-    <View style={{padding:30,marginTop:20}}>
+    <LinearGradient colors={['#f54e42', '#f5dd42']} style={styles.container}>
     <Card style={styles.card}>
       <Card.Title style={{marginLeft:80}}title="Signup"/>
       <Card.Content>
+
       <TextInput
         style={{marginTop:10}}
         label="Name"
@@ -47,6 +53,11 @@ export default function SignupScreen({ navigation }) {
         value={email}
         onChangeText={(email)=>setEmail(email)}
       />
+      {error==="The email address is badly formatted." &&
+        <HelperText type="error">
+            {error}
+        </HelperText>
+      }
       <TextInput
         style={{marginTop:10}}
         label="Password"
@@ -55,16 +66,35 @@ export default function SignupScreen({ navigation }) {
         secureTextEntry={true}
         value={password}
         onChangeText={(password)=>{setPassword(password)}}
-
       />
-      <Card.Actions>
-        <Button  mode="contained" onPress={() => saveitem()} on style={{marginTop:10,width:250}} >
+      {error==="Password should be at least 6 characters" &&
+        <HelperText type="error">
+            {error}
+        </HelperText>
+      }
+      {error==="The email address is already in use by another account." && 
+           <Dialog visible={visible} onDismiss={hideDialog}>
+           <Dialog.Title>Alert</Dialog.Title>
+           <Dialog.Content>
+             <Paragraph>The email address is already in use by another account.</Paragraph>
+           </Dialog.Content>
+           <Dialog.Actions>
+             <Button onPress={hideDialog}>OK</Button>
+           </Dialog.Actions>
+         </Dialog>
+      }
+    <Card.Actions>
+        <Button  mode="contained" onPress={()=>saveitem()} style={{marginTop:10,width:'100%'}} >
           Submit
         </Button>
-      </Card.Actions>
+        <Button   onPress={()=>saveitem()} >
+          already have account?
+        </Button>
+
+    </Card.Actions>
     </Card.Content>
-</Card>
-  </View>
+  </Card>
+  </LinearGradient>
   </>
   );
 }
@@ -73,8 +103,13 @@ const styles = StyleSheet.create({
   card:{
     marginTop:40,
     padding:5,
-    backgroundColor:'#f4913b',
+    backgroundColor:'#3fabab',
   },
+  container:{
+    flex:1,
+    justifyContent:'flex-start',
+    padding:10,
+  }
 
 
 });
